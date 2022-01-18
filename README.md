@@ -91,3 +91,12 @@ kubectl -n rook-ceph get pod -l app=rook-ceph-mds
 
 Once the filesystem is created, we will create a storageclass to automate teh creation of persistent volumes by kubernetes based on the fileystsem we created earlier.
 
+```
+kubectl create -f manifests/storageclass/storageclass.yaml
+```
+
+Once the storage class is created, all we need to deploy is the deployment manifest and the persistent volume claim.
+
+```
+kubectl create -f manifests/demoapp/main.yaml
+```
