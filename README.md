@@ -92,11 +92,25 @@ kubectl -n rook-ceph get pod -l app=rook-ceph-mds
 Once the filesystem is created, we will create a storageclass to automate teh creation of persistent volumes by kubernetes based on the fileystsem we created earlier.
 
 ```
-kubectl create -f manifests/storageclass/storageclass.yaml
+kubectl create -f manifests/storageclass/sharedfilesystem.yaml
 ```
 
 Once the storage class is created, all we need to deploy is the deployment manifest and the persistent volume claim.
 
 ```
 kubectl create -f manifests/demoapp/main.yaml
+```
+
+## Creating a RWO storage class
+
+Other powercard components don't need RWX mode, such as kafka and prometheus, that's why we will create another storageclass to manage RWO persistent volumes.
+
+```
+kubectl create -f manifests/storageclass/block.yaml
+```
+
+We need to make this Storageclass as a default.
+
+```
+kubectl patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
